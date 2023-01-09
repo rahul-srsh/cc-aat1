@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  web:
+    container_name: web-app
+    image: abhinandanudupa/test-app:app
+    restart: always
+    build: ./
+    ports:
+      - "80:4000"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    # volumes:
+    #   - .:/usr/src/app
+    environment:
+      - MONGODB_URI=mongodb://mongo/notesdb
+      - PORT=4000
+      - NODE_ENV=development
+    command: /bin/sh -c 'npm install && npm run dev'
+
+  mongo:
+    container_name: mongo-database
+    image: mongo
+    ports:
+      - "27017:27017"
+    logging:
+      driver: none
